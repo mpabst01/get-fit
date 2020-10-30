@@ -1,7 +1,7 @@
-const Workout = require("../Develop/models/WorkoutModel");
+const Workout = require("../Develop/models/work_out.js");
 const Mongoose  = require("mongoose");
 
-const Range = function findRange(workouts) {
+const Range = function findRange(tracker) {
     workoutS = []
     const emptyWorkout = {
         exercises : [],
@@ -23,7 +23,7 @@ const Range = function findRange(workouts) {
 module.exports = function (app) {
     console.log('Engaging api-routes.js');
 
-    app.get("/api/workouts", async (req, res) => {
+    app.get("/api/tracker", async (req, res) => {
         var workouts = await workOut.find();
         for (const workout of workouts) {
             await workout.setTotalDuration()
@@ -31,15 +31,15 @@ module.exports = function (app) {
         res.json(workouts);
     });
 
-    app.post("/api/workouts", (req, res) => {
+    app.post("/api/tracker", (req, res) => {
         Workout.create(req.body).then(data => {
             res.json(data)
         })
     });
 
-    app.put("/api/workouts/:id", async (req, res) => {
+    app.put("/api/tracker/:id", async (req, res) => {
         var workoutId = req.params.id
-        Workout.findOneAndUpdate({ _id: Mongoose.Types.ObjectId(workoutId) }, {
+        workOut.findOneAndUpdate({ _id: Mongoose.Types.ObjectId(workoutId) }, {
             $push: {
                 exercises: req.body
             }
@@ -49,9 +49,9 @@ module.exports = function (app) {
         
     });
 
-    app.get("/api/workouts/range", async (req, res) => {
+    app.get("/api/tracker/range", async (req, res) => {
         console.log('workouts and range api route.');
-        Workout.find().then(data => {
+        workOut.find().then(data => {
             res.json(data);
         }).catch(err => alert(err))
     });
