@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Exercise = require("./exercise");
+const exacise = require("./exercise");
 
 const Schema = mongoose.Schema;
 
@@ -49,6 +49,37 @@ const workOutSchema = new Schema("Work out", {
 
 });
 
+workOutSchema.methods.setTotalDuration = function () {
+
+    console.log("Create set duration function")
+    for (const exercise of this.exercises) 
+    {
+        console.log(exercise);
+        this.timeSpentMakingGains += exercise.duration;
+    }
+    console.log("test duration");
+    console.log(this.timeSpentMakingGains);
+    return this.timeSpentMakingGains;
+}
+workOutSchema.methods.findRange = function (workouts) {
+    workoutS = [];
+    const emptyWorkout = {
+        exercises: [],
+        timeSpentMakingGains: 0
+    };
+    var dayOfTheWeek = new Date(Date.now()).getDay();
+
+    for (x = 0; x <= dayOfTheWeek; x++) {
+        if (workouts[x]) {
+            workoutS.unshift(workouts[x])
+        }
+        else {
+            workoutS.unshift(emptyWorkout)
+        };
+    }
+
+    return workoutS;
+}
 
 const wod = mongoose.model("Workout", workOutSchema);
 module.exports = wod;
